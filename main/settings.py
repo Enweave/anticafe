@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'cafe.apps.CafeConfig',
+    'stock.apps.StockConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -108,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
 
@@ -126,5 +128,3 @@ STATIC_URL = '/static/'
 # widget tweaks
 INSTALLED_APPS += ('widget_tweaks',)
 
-# cafe and stock
-INSTALLED_APPS += ('cafe', 'stock')
