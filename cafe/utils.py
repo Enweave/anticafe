@@ -10,7 +10,7 @@ def get_timezone_choices(predefined=True):
         for tz in pytz.common_timezones:
             shift = pytz.timezone(tz).localize(datetime.datetime(2015, 1, 1)).strftime('%z')
             shift_name = "%s:%s" % (shift[:3], shift[3:])
-            choices.append((int(shift), shift_name))
+            choices.append((shift, shift_name))
         return sorted(set(choices), key=lambda k: int(k[0]))
     else:
         return [(-1100, '-11:00'), (-1000, '-10:00'), (-930, '-09:30'), (-900, '-09:00'), (-800, '-08:00'),

@@ -13,11 +13,12 @@ from cafe.utils import get_timezone_choices
 class Cafe(models.Model):
     name = models.CharField(
         verbose_name=u"Название кафе",
-        max_length="255"
+        max_length=255
     )
     timezone = models.CharField(
         verbose_name=u"Временная зона",
-        choices=get_timezone_choices()
+        choices=get_timezone_choices(),
+        max_length=255
     )
 
     def __unicode__(self):
@@ -35,12 +36,18 @@ class Rate(models.Model):
     )
     name = models.CharField(
         verbose_name=u"Название тарифа",
-        max_length="255"
+        max_length=255
     )
     default_price = models.FloatField(
         verbose_name=u"Цена в минуту по-умолчанию",
         validators=[MinValueValidator(0)]
     )
+
+    def __unicode__(self):
+        return self.name
+
+    def get_periods(self):
+        return RatePeriod.objects.filter(rate=self)
 
     class Meta:
         verbose_name = u"Тариф"
@@ -63,6 +70,9 @@ class RatePeriod(models.Model):
         validators=[MinValueValidator(0)]
     )
 
+    def __unicode__(self):
+        return u"%s [%s|%s]" % (self.rate.name, self.time_start, self.time_end)
+
     class Meta:
         verbose_name = u"Цена в периоде"
         verbose_name_plural = u"Цены в периоде"
@@ -79,12 +89,15 @@ class Table(models.Model):
     )
     name = models.CharField(
         verbose_name=u"Название стола",
-        max_length="255"
+        max_length=255
     )
     active = models.BooleanField(
         verbose_name=u"Активен?",
         default=False
     )
+
+    def __unicode__(self):
+        return self.name
 
     class Meta:
         verbose_name = u"Столик"
@@ -124,3 +137,7 @@ class Visit(models.Model):
     class Meta:
         verbose_name = u"Посещение"
         verbose_name_plural = u"Посещения"
+
+    def __unicode__(self):
+        # TODO: format start and end
+        return u"Посещение за столиком '%s' с %s по %s" % (self.table.name,self.start, self.end )
