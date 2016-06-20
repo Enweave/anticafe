@@ -3,6 +3,7 @@
 from django.contrib import admin
 
 # Register your models here.
+from cafe.forms import RatePeriodForm
 
 from models import Cafe, Rate, RatePeriod, Table, Visit
 
@@ -26,7 +27,10 @@ admin.site.register(Rate, RateAdmin)
 
 
 class RatePeriodAdmin(admin.ModelAdmin):
-    list_display = ("get_title",)
+    list_display = ("get_title", "rate", "price")
+    list_filter = ("rate",)
+
+    form = RatePeriodForm
 
     def get_title(self, obj):
         return obj.__unicode__()
