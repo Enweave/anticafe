@@ -13,11 +13,11 @@ from cafe.models import Cafe
 class Unit(models.Model):
     name = models.CharField(
         verbose_name=u"Название стола",
-        max_length="255"
+        max_length=255
     )
     entry = models.CharField(
         verbose_name=u"Обозначение",
-        max_length="255"
+        max_length=255
     )
     active = models.BooleanField(
         verbose_name=u"Активна?",
@@ -42,7 +42,7 @@ class StockItem(models.Model):
     )
     name = models.CharField(
         verbose_name=u"Название стола",
-        max_length="255"
+        max_length=255
     )
     quantity = models.IntegerField(
         verbose_name=u"Количество на складе",
@@ -59,13 +59,12 @@ class StockItem(models.Model):
         default=False
     )
 
-
     class Meta:
         verbose_name = u"Продукт"
         verbose_name_plural = u"Продукты"
 
 
-class SpentStockItem(models):
+class SpentStockItem(models.Model):
     stock_item = models.ForeignKey(
         StockItem,
         verbose_name="Продукт"
@@ -85,3 +84,7 @@ class SpentStockItem(models):
         verbose_name=u"Дата",
         default=timezone.now
     )
+
+    class Meta:
+        verbose_name = u"Запись о расходах"
+        verbose_name_plural = u"Записи о расходах"
