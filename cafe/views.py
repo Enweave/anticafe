@@ -91,7 +91,8 @@ def reports(request):
                 items = Visit.objects.filter(
                     start__gte=form.cleaned_data.get('date_from', ""),
                     start__lte=to,
-                    table__id__in=tables
+                    table__id__in=tables,
+                    active=False
                 )
                 items_count = items.count()
                 total_cost = reduce(lambda a,b: a + b, [i.total_cost if i.total_cost else 0 for i in items], 0)
