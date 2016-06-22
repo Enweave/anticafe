@@ -94,7 +94,7 @@ def reports(request):
                     table__id__in=tables
                 )
                 items_count = items.count()
-                total_cost = reduce(lambda a,b: a + b, [i.total_cost for i in items], 0)
+                total_cost = reduce(lambda a,b: a + b, [i.total_cost if i.total_cost else 0 for i in items], 0)
     return render(request,"cafe/reports_page.html", {
         "breadcrumbs": [{"title": "отчёты" }],
         "report_form": form,
