@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-
-# Register your models here.
 from cafe.forms import RatePeriodForm
-
 from models import Cafe, Rate, RatePeriod, Table, Visit
 
 
@@ -18,6 +15,7 @@ class RateAdmin(admin.ModelAdmin):
     list_display = ('name', 'cafe', 'list_periods')
 
     def list_periods(self, obj):
+        # список RatePeriod для вывода в столбце
         return reduce(lambda a, b: a+u"%s<br>, " % b, [i.__unicode__() for i in obj.get_periods()], u"")[:-2]
 
     list_periods.short_description = u"Цены в минуту"

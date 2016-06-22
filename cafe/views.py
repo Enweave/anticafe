@@ -6,20 +6,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 from cafe.models import Cafe, Table
 
 
-def cafe_mixin(cafe, context):
-    context.update({
-        "item": cafe,
-        "breadcrumbs": cafe.get_breadcrumbs()
-    })
-    return context
-
-
 def cafe_detail(request, pk):
     cafe = get_object_or_404(Cafe, pk=pk)
     return render(
         request,
         "cafe/cafe_detail.html",
-        cafe_mixin(cafe, {})
+        {
+            "item": cafe,
+            "breadcrumbs": cafe.get_breadcrumbs()
+        }
     )
 
 

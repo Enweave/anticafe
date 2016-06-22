@@ -184,12 +184,14 @@ class Visit(models.Model):
         verbose_name = u"Посещение"
         verbose_name_plural = u"Посещения"
 
-    # def calculate(self):
-    #     self.summary = self.end - self.start
-
     def cancel(self):
         self.delete()
 
+    # решаем проблему
+    # поля DateTime хранятся в UTC
+    # поля Time - naive,
+    # используя timezone объекта Cafe, получаем timedelta,
+    # с помощью которого можно привести в соответствие время start/end у Visit и time_start/time_end у RatePeriod
     def get_time_shift(self):
         shift = self.table.cafe.timezone
         hours = int(shift[:3])
@@ -278,7 +280,6 @@ class Visit(models.Model):
                     (self.end + datetime.timedelta(days=1)),
                     (self.end + datetime.timedelta(days=spent_full_days))
                 )
-
                 if all_rate_periods:
                     prev_time = datetime.time()
                     for rate_period in all_rate_periods:
@@ -302,6 +303,7 @@ class Visit(models.Model):
                 days_cost = day_cost * spent_full_days
                 summary.append("За %s дней начислено %s Р.\n общей стоимостью %s Р.\n" % (spent_full_days,day_cost, days_cost))
                 total_cost += day_cost
+
             # считаем стоимость посещений в последний день
             if rate_periods_end:
                 prev_time = datetime.time()
@@ -319,6 +321,7 @@ class Visit(models.Model):
                 cost = get_minutes(prev_time, end_time) * default_price
                 summary.append(make_summary_entry(cost, prev_time, end_time, default_price))
                 total_cost += cost
+        # обрабатываем случай, когда посещение происходило втечение одного календарного дня
         else:
             rate_periods = self.get_rate_periods()
             prev_time = (self.start + self.get_time_shift()).time()
@@ -335,12 +338,13 @@ class Visit(models.Model):
                 total_cost += cost
                 prev_time = rate_period.time_end
 
-
             cost = get_minutes(prev_time, end_time) * default_price
             summary.append(make_summary_entry(cost, prev_time, end_time, default_price))
             total_cost += cost
 
             summary.append(u"\nИтого к оплате %s Р." % total_cost)
+
+
         self.total_cost = total_cost
         self.summary = "".join(summary)
         self.active = False
