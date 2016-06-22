@@ -234,7 +234,7 @@ class Visit(models.Model):
         # выясняем, если посещение длилось втечение нескольких календарных дней
         days = (self.end - self.start).days
 
-        summary.append(u"Расчёт от %s \n\n" % self.end)
+        summary.append(u"Расчёт от %s:\n\n" % self.end)
 
         if days > 0:
             # выясняем, сколько дней длилось посещение
@@ -249,7 +249,7 @@ class Visit(models.Model):
             # prev_time используется при итерации по "ценам в периоде"
             # изначально выставляется на значение начала посещения
             prev_time = (self.start + self.get_time_shift()).time()
-
+            end_time = (self.end + self.get_time_shift()).time()
             # рассчитываем стоимость посещения в первый день
             if rate_periods_start:
 
@@ -310,33 +310,37 @@ class Visit(models.Model):
                     summary.append(make_summary_entry(cost, prev_time, rate_period.time_start, default_price))
                     total_cost += cost
 
-                    cost = get_minutes(rate_period.time_start, rate_period.time_end) * rate_period.price
-                    summary.append(make_summary_entry(cost, rate_period.time_start, rate_period.time_end, rate_period.price))
+                    real_end_time = rate_period.time_end if rate_period.time_end < end_time else end_time
+
+                    cost = get_minutes(rate_period.time_start, real_end_time) * rate_period.price
+                    summary.append(make_summary_entry(cost, rate_period.time_start, real_end_time, rate_period.price))
                     total_cost += cost
 
-                end_time = (self.end + self.get_time_shift()).time()
                 cost = get_minutes(prev_time, end_time) * default_price
                 summary.append(make_summary_entry(cost, prev_time, end_time, default_price))
                 total_cost += cost
         else:
             rate_periods = self.get_rate_periods()
             prev_time = (self.start + self.get_time_shift()).time()
+            end_time = (self.end + self.get_time_shift()).time()
             for rate_period in rate_periods:
                 cost = get_minutes(prev_time, rate_period.time_start) * default_price
                 summary.append(make_summary_entry(cost, prev_time, rate_period.time_start, default_price))
                 total_cost += cost
 
+                real_end_time = rate_period.time_end if rate_period.time_end < end_time else end_time
 
-                cost = get_minutes(rate_period.time_start, rate_period.time_end) * rate_period.price
-                summary.append(make_summary_entry(cost, rate_period.time_start, rate_period.time_end, rate_period.price))
+                cost = get_minutes(rate_period.time_start, real_end_time) * rate_period.price
+                summary.append(make_summary_entry(cost, rate_period.time_start, real_end_time, rate_period.price))
                 total_cost += cost
                 prev_time = rate_period.time_end
 
-            end_time = (self.end + self.get_time_shift()).time()
+
             cost = get_minutes(prev_time, end_time) * default_price
             summary.append(make_summary_entry(cost, prev_time, end_time, default_price))
             total_cost += cost
-            summary.append(u"\n итого к оплате %s Р." % total_cost)
+
+            summary.append(u"\nИтого к оплате %s Р." % total_cost)
         self.total_cost = total_cost
         self.summary = "".join(summary)
         self.active = False
