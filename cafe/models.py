@@ -234,7 +234,7 @@ class Visit(models.Model):
         # выясняем, если посещение длилось втечение нескольких календарных дней
         days = (self.end - self.start).days
 
-        summary.append(u"Расчёт от %s \n" % self.end)
+        summary.append(u"Расчёт от %s \n\n" % self.end)
 
         if days > 0:
             # выясняем, сколько дней длилось посещение
@@ -336,6 +336,7 @@ class Visit(models.Model):
             cost = get_minutes(prev_time, end_time) * default_price
             summary.append(make_summary_entry(cost, prev_time, end_time, default_price))
             total_cost += cost
+            summary.append(u"\n итого к оплате %s Р." % total_cost)
         self.total_cost = total_cost
         self.summary = "".join(summary)
         self.active = False

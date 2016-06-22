@@ -23,4 +23,7 @@ def get_minutes(time_start, time_end, force_positive_or_zero=True):
 
 
 def make_summary_entry(cost, time_from, time_to, price_per_minute):
-    return u"Начислено %s в период с %s по %s по цене %s Р в мин. \n" % (cost,time_from,time_to, price_per_minute)
+    if cost > 0:
+        return u"Начислено %s в период с %s по %s по цене %s Р в мин. \n" % (cost,time_from,time_to, price_per_minute)
+    else:
+        return u""

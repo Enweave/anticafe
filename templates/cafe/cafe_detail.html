@@ -9,15 +9,22 @@
         <div class="col-xs-12">
             <h3>{{ item.get_title }}</h3>
         </div>
-        {% if item.get_tables %}
     </div>
     <div class="row">
-            {% for table in item.get_tables %}
-                {% include "cafe/templatetags/table_list_item.html" with table=table %}
-            {% endfor %}
+        {% if request.user.is_authenticated %}
+            {% if item.get_tables %}
+
+                {% for table in item.get_tables %}
+                    {% include "cafe/templatetags/table_list_item.html" with table=table %}
+                {% endfor %}
+            {% else %}
+                <div class="col-xs-12 col-sm-6">
+                    <div class="alert alert-warning">В данном кафе нет столиков!</div>
+                </div>
+            {% endif %}
         {% else %}
             <div class="col-xs-12 col-sm-6">
-                <div class="alert alert-warning">В данном кафе нет столиков!</div>
+                <div class="alert alert-warning">Для доступа к управлению столиками необходима авторизация</div>
             </div>
         {% endif %}
     </div>
