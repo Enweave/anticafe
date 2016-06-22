@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 
+{% load cafe_extras %}
+
 {% block page_meta %}
     <title>Index</title>
 {% endblock %}
 
 {% block main_content %}
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-12">
-
-            </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-4">
+            <h3>Все кафе:</h3>
+            {% cafe_list %}
         </div>
     </div>
 {% endblock %}

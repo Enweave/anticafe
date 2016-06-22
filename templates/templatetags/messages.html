@@ -1,7 +1,9 @@
 {% if messages %}
-    <div class="col-xs-12">
-        {% for message in messages %}
-            <div class="alert alert-success">{{ message|safe }}</div>
-        {% endfor %}
+    <div class="row">
+        <div class="col-xs-12">
+            {% for message in messages %}
+                <div class="alert alert-{% if message.extra_tags %}{{ message.extra_tags }}{% else %}warning{% endif %}">{{ message|safe }}</div>
+            {% endfor %}
+        </div>
     </div>
 {% endif %}

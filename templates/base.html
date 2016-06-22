@@ -29,27 +29,19 @@
 {#                </div>#}
             </div>
         </div>
-        <div class="row">
-            {% include "templatetags/messages.html" %}
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                {% block breaducrumbs %}{% endblock %}
-            </div>
-        </div>
+
+        {% include "templatetags/messages.html" %}
+        {% include "templatetags/breadcrumbs.html" %}
+
     </div>
-
-    {% block main_content %}{% endblock %}
-    <div class="footer-placeholder"></div>
-</div>
-
-<div class="footer-wrapper">
     <div class="container">
-        <div class="row">
-
-        </div>
+        {% block main_content %}{% endblock %}
     </div>
+{#    <div class="footer-placeholder"></div>#}
 </div>
+
+{#<div class="footer-wrapper">#}
+{#</div>#}
 
 {% include "templatetags/pagescripts.html" %}
 

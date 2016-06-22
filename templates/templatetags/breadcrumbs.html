@@ -1,0 +1,16 @@
+{% if breadcrumbs %}
+    <div class="row">
+        <div class="col-xs-12">
+            <ol class="breadcrumb">
+                <li><a href="/">Главная</a></li>
+                {% for b in breadcrumbs %}
+                    {% if forloop.last %}
+                        <li class="active">{{ b.title }}</li>
+                    {% else %}
+                        <li><a href="{{ b.url }}">{{ b.title }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+{% endif %}

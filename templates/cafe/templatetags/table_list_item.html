@@ -1,0 +1,33 @@
+<div class="col-xs-12 col-sm-4 col-md-3">
+    {% if table.get_active_visit %}
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h4>{{ table.get_title }}</h4>
+            </div>
+            <div class="panel-body">
+                <p>столик занят </p>
+                <form method="post" action="{% url "cafe:toggle-table" table.pk 2 %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">отменить</button>
+                </form>
+                <form method="post" action="{% url "cafe:toggle-table" table.pk 0 %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">рассчитать</button>
+                </form>
+            </div>
+        </div>
+    {% else %}
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h4>{{ table.get_title }}</h4>
+            </div>
+            <div class="panel-body">
+                <p>столик свободен</p>
+                <form method="post" action="{% url "cafe:toggle-table" table.pk 1 %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-info">занять</button>
+                </form>
+            </div>
+        </div>
+    {% endif %}
+</div>

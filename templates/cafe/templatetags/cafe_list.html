@@ -1,0 +1,7 @@
+{% if items %}
+    <div class="list-group">
+        {% for item in items %}
+            <a class="list-group-item" href="{{ item.get_absolute_url }}">{{ item }}</a>
+        {% endfor %}
+    </div>
+{% endif %}
