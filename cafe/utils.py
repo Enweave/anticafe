@@ -55,3 +55,7 @@ def make_summary_entry(cost, time_from, time_to, price_per_minute):
         return u"Начислено %s Р. в период с %s по %s по цене %s Р в мин. \n" % (cost,time_from,time_to, price_per_minute)
     else:
         return u""
+
+
+def get_input_date_format():
+    return "%d/%m/%Y"

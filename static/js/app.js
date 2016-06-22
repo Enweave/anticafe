@@ -30,16 +30,7 @@ var datepicker_defaults = {
         language: "ru"
     };
 
-/**
- * run function "f" if $container is found
- *
- * @param {object} $container - object to be tested
- * @param {function} f - function to run
- */
-var rice = function($container, f) {
-    if ($container.length>0) {f($container)}
-};
-
 $(document).ready(function() {
-
+    var $form = $("#report_form");
+    $form.find('[name="date_from"],[name="date_to"]').datepicker(datepicker_defaults);
 });

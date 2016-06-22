@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block page_meta %}
+    <title>Отчёты</title>
+{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Отчёты</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div  class="col-xs-12 col-sm-3">
+            {% include "cafe/templatetags/report_form.html" with form=report_form %}
+        </div>
+        <div  class="col-xs-12 col-sm-9">
+        {% if has_report %}
+            {% if items %}
+                <h2>Посещения</h2>
+                <div class="alert alert-info">
+                    Всего посещений: {{ items_count }}<br>
+                    на общую сумму: {{ total_cost|floatformat:0|intcomma }} Р.
+                </div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Столик</th>
+                        <th>Начало</th>
+                        <th>Окончание</th>
+                        <th>Время посещения</th>
+                        <th>Стоимость</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.table.name }}</td>
+                            <td>{{ item.start|date:"d M Y" }}</td>
+                            <td>{{ item.end|date:"d M Y" }}</td>
+                            <td>{{ item.get_time_spent }}</td>
+                            <td>{{ item.total_cost|floatformat:0|intcomma }} Р.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+        {% endif %}
+        </div>
+    </div>
+{% endblock %}

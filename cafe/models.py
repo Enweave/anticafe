@@ -219,6 +219,12 @@ class Visit(models.Model):
     def get_all_rate_periods(self):
         return RatePeriod.objects.filter(rate=self.table.rate)
 
+    def get_time_spent(self):
+        spent_time = (self.end - self.start).total_seconds()
+        hours, remainder = divmod(spent_time, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        return "%s ч. %s м" % (hours, minutes)
+
     # рассчитываем стоимость посещения.
     def finalize(self):
         # время окончания посещения

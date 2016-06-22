@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+import datetime
 
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404, redirect
-from cafe.models import Cafe, Table
+from cafe.forms import ReportForm
+from cafe.models import Cafe, Table, Visit
 
 
 def cafe_detail(request, pk):
@@ -67,3 +69,38 @@ def toggle_table(request, pk, key):
     table_dispatch.get(key, empty_table_function)(request, table)
 
     return redirect(reverse("cafe:cafe-detail", kwargs={"pk": table.cafe.pk}))
+
+
+def reports(request):
+    form = ReportForm()
+    items = []
+    has_report = False
+    items_count = 0
+    total_cost = 0
+    if request.POST:
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            has_report=True
+            cafes = Cafe.objects.filter(id=form.cleaned_data.get("cafe", ""))
+            if cafes:
+                cafe = cafes[0]
+                tables = cafe.get_tables().values_list("id", flat=True)
+                to = form.cleaned_data.get('date_to', "")
+                if to:
+                    to += datetime.timedelta(days=1)
+                items = Visit.objects.filter(
+                    start__gte=form.cleaned_data.get('date_from', ""),
+                    start__lte=to,
+                    table__id__in=tables
+                )
+                items_count = items.count()
+                total_cost = reduce(lambda a,b: a + b, [i.total_cost for i in items], 0)
+    return render(request,"cafe/reports_page.html", {
+        "breadcrumbs": [{"title": "отчёты" }],
+        "report_form": form,
+        "nav_selected": 0,
+        "items": items,
+        "has_report": has_report,
+        "items_count": items_count,
+        "total_cost": total_cost
+    })
