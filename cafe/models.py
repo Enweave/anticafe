@@ -30,7 +30,7 @@ class Cafe(models.Model):
         return self.name
 
     def get_breadcrumbs(self):
-        return [{"title": self.get_title()}]
+        return [{"title": self.get_title(),"url": self.get_absolute_url()}]
 
     def get_tables(self):
         return Table.objects.filter(cafe=self, active=True)
@@ -133,8 +133,7 @@ class Table(models.Model):
 
     def end_active_visit_and_calculate(self):
         if self.get_active_visit():
-            self.get_active_visit().finalize()
-            return True
+            return self.get_active_visit().finalize()
         else:
             return False
 
@@ -355,6 +354,7 @@ class Visit(models.Model):
         self.summary = "".join(summary)
         self.active = False
         self.save()
+        return total_cost
 
     def __unicode__(self):
         # TODO: format start and end

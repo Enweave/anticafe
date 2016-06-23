@@ -2,8 +2,11 @@
 import datetime
 
 from django.contrib import messages
+from django.contrib.humanize.templatetags.humanize import intcomma
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.defaultfilters import floatformat
+
 from cafe.forms import ReportForm
 from cafe.models import Cafe, Table, Visit
 
@@ -30,14 +33,17 @@ def activate_table(request, table):
     else:
         messages.success(request, u"<p>Произошла ошибка!<br> %s уже занят</p>" % table.name, extra_tags="danger")
 
-
 def deactivate_table(request, table):
     if table.get_active_visit():
         success = table.end_active_visit_and_calculate()
     else:
         success = False
-    if success:
-        messages.success(request, u"<p>%s освобождён</p>" % table.name, extra_tags="success")
+    if success != False:
+        messages.success(request,
+            u"<p>%s освобождён<p><p> К ОПЛАТЕ: %s Р.</p>" %
+            (table.name, intcomma(floatformat(success, 0))),
+            extra_tags="success"
+        )
     else:
         messages.success(request, u"<p>Произошла ошибка!<br> %s не был занят</p>" % table.name, extra_tags="danger")
 
