@@ -61,6 +61,16 @@ class StockItem(models.Model):
         default=False
     )
 
+    def get_spent_stock_items(self):
+        return SpentStockItem.objects.filter(stock_item=self)
+
+    def get_current_quantity(self):
+        spent_items = SpentStockItem.objects.filter(stock_item=self, date__date=timezone.now().date()).order_by("id")
+        if spent_items:
+            return list(spent_items.values_list("current_quantity", flat=True))[-1]
+        else:
+            return self.quantity
+
     def __unicode__(self):
         return self.name
 
@@ -72,7 +82,8 @@ class StockItem(models.Model):
 class SpentStockItem(models.Model):
     stock_item = models.ForeignKey(
         StockItem,
-        verbose_name="Продукт"
+        verbose_name="Продукт",
+        validators=[MinValueValidator(0)]
     )
 
     unit = models.ForeignKey(
@@ -86,10 +97,17 @@ class SpentStockItem(models.Model):
         verbose_name=u"изменение",
     )
 
+    current_quantity = models.IntegerField(
+        verbose_name=u"текущее значение",
+    )
+
     date = models.DateTimeField(
         verbose_name=u"Дата",
         default=timezone.now
     )
+
+    def __unicode__(self):
+        return u"%s x %s" % (self.stock_item.name, self.quantity)
 
     class Meta:
         verbose_name = u"Запись о расходах"
@@ -106,6 +124,7 @@ def stock_post_save(sender, **kwargs):
         new_spent_stock = SpentStockItem(
             stock_item=instance,
             unit=instance.unit,
-            quantity=instance.quantity
+            quantity=instance.quantity,
+            current_quantity=instance.quantity
         )
         new_spent_stock.save()

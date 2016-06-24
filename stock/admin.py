@@ -17,6 +17,9 @@ class StockItemAdmin(admin.ModelAdmin):
     list_display = ("name", "cafe", "quantity", "active")
     list_filter = ("cafe", "active")
 
+    # def has_delete_permission(self, request, obj=None):
+    #     return False
+
     def get_form(self, request, obj=None, **kwargs):
         if obj:
             self.exclude = ('quantity',)
@@ -29,5 +32,11 @@ admin.site.register(StockItem, StockItemAdmin)
 class SpentStockItemAdmin(admin.ModelAdmin):
     list_display = ("stock_item", "date", "quantity")
     list_filter = ("stock_item",)
+    readonly_fields = ("stock_item", "date", "quantity", "current_quantity")
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def has_add_permission(self, request):
+        return False
 admin.site.register(SpentStockItem, SpentStockItemAdmin)

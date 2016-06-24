@@ -30,7 +30,7 @@
                         {% for item in stock_items %}
                             <tr>
                                 <td>{{ item.name }}</td>
-                                <td>{{ item.quantity }} {{ item.unit.entry }}</td>
+                                <td>{{ item.get_current_quantity }} {{ item.unit.entry }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 
@@ -42,11 +43,13 @@ def edit_stock(request, cafe_id):
                     new_stock_spent_item = SpentStockItem(
                         stock_item=stock_item,
                         unit=stock_item.unit,
-                        quantity=int(request.POST.getlist("quantity")[i])
+                        quantity=quantity,
+                        date=form.cleaned_data.get("date")
                     )
+                    stock_item.quantity += quantity
+                    new_stock_spent_item.current_quantity = stock_item.quantity
 
                     new_stock_spent_item.save()
-                    stock_item.quantity += quantity
                     stock_item.save()
                 messages.success(request, u"<p>Изменение успешно проведено</p>", extra_tags="success")
 
@@ -65,8 +68,18 @@ def stock_reports(request):
 
     if request.POST:
         form = ReportForm(request.POST)
-        # spent_stock_items =
+        if form.is_valid():
+            stock_items = StockItem.objects.filter(active=True, cafe__id=form.cleaned_data.get("cafe"))
+            date_from = form.cleaned_data.get('date_from')
+            date_to = form.cleaned_data.get('date_to')
 
+            for item in stock_items:
+
+                spent_stock_items = item.get_spent_stock_items().filter(
+                    date__date__gte=date_from,
+                    date__date__lte=date_to
+                )
+                print spent_stock_items
     return render(request, "stock/report.html", {
         "breadcrumbs": [{"title": "отчёты (склады)" }],
         "report_form": form,
