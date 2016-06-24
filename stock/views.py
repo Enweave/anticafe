@@ -79,7 +79,6 @@ def stock_reports(request):
                     date__date__gte=date_from,
                     date__date__lte=date_to
                 )
-                print spent_stock_items
     return render(request, "stock/report.html", {
         "breadcrumbs": [{"title": "отчёты (склады)" }],
         "report_form": form,
