@@ -27,5 +27,6 @@ admin.site.index_title = u'Антикафе'
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="index.html")),
     url(r'^', include("cafe.urls", namespace="cafe")),
+    url(r'^', include("stock.urls", namespace="stock")),
     url(r'^admin/', admin.site.urls),
 ]

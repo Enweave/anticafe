@@ -12,7 +12,7 @@ from cafe.models import Cafe
 
 class Unit(models.Model):
     name = models.CharField(
-        verbose_name=u"Название стола",
+        verbose_name=u"Название",
         max_length=255
     )
     entry = models.CharField(
@@ -23,6 +23,9 @@ class Unit(models.Model):
         verbose_name=u"Активна?",
         default=False
     )
+
+    def __unicode__(self):
+        return self.name
 
     class Meta:
         verbose_name = u"Единица измерения"
@@ -41,7 +44,7 @@ class StockItem(models.Model):
         null=True
     )
     name = models.CharField(
-        verbose_name=u"Название стола",
+        verbose_name=u"Название",
         max_length=255
     )
     quantity = models.IntegerField(
@@ -58,6 +61,9 @@ class StockItem(models.Model):
         verbose_name=u"Активен?",
         default=False
     )
+
+    def __unicode__(self):
+        return self.name
 
     class Meta:
         verbose_name = u"Продукт"
@@ -76,6 +82,7 @@ class SpentStockItem(models.Model):
         blank=True,
         null=True
     )
+
     quantity = models.IntegerField(
         verbose_name=u"Сколько потрачено",
         validators=[MinValueValidator(0)]

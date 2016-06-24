@@ -30,7 +30,7 @@ class Cafe(models.Model):
         return self.name
 
     def get_breadcrumbs(self):
-        return [{"title": self.get_title(),"url": self.get_absolute_url()}]
+        return [{"title": self.get_title(), "url": self.get_absolute_url()}]
 
     def get_tables(self):
         return Table.objects.filter(cafe=self, active=True)

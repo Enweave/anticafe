@@ -2,7 +2,9 @@
     <h3>Все кафе:</h3>
     <div class="list-group">
         {% for item in items %}
-            <a class="list-group-item" href="{{ item.get_absolute_url }}">{{ item }}</a>
+            <li class="list-group-item clearfix">
+                <a class="pull-left" href="{{ item.get_absolute_url }}">{{ item }}</a> <a class="badge pull-right" href="{% url "stock:edit-stock" item.id %}">склад</a>
+            </li>
         {% endfor %}
     </div>
 {% endif %}

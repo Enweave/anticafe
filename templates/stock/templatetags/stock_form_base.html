@@ -1,0 +1,28 @@
+{% load widget_tweaks %}
+
+<form method="post" action="{% url "stock:edit-stock" cafe_id %}" id="supply_form" data-get-stock-url="{% url "stock:get-stock-items" cafe_id %}">
+    {% csrf_token %}
+
+    {% for field in form %}
+        <div class="form-group{% if field.errors %} has-error{% endif %}{% if field.is_hidden %} hidden{% endif %}">
+            <label class="control-label">{{ field.label }}</label>
+            {% if field.field.required %}
+                {{ field|append_attr:"required:required"|add_class:"form-control" }}
+            {% else %}
+                {{ field|add_class:"form-control"}}
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <div id="extra_fields">
+
+    </div>
+
+    <div id="form_actions" class="form-group">
+        <div id="change_supply" class="btn btn-success"><i class="glyphicon glyphicon-plus-sign"></i> Продукт</div>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn-primary btn btn-lg">СОХРАНИТЬ</button>
+    </div>
+</form>

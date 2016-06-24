@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block page_meta %}
+    <title>Склад - {{ cafe.get_title }}</title>
+{% endblock %}
+
+{% block main_content %}
+    <div class="row">
+        <div class="col-xs-12">
+            <h3>Склад - {{ cafe.get_title }}</h3>
+        </div>
+    </div>
+    <div class="row">
+        {% if request.user.is_authenticated %}
+            <div class="col-xs-12 col-sm-3">
+                <h4>Добавить/убавить продукт</h4>
+                {% include "stock/templatetags/stock_form_base.html" with form=form cafe_id=cafe.id %}
+            </div>
+            <div class="col-xs-12 col-sm-9">
+                <h4>Продукты</h4>
+                {% if stock_items %}
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Количество</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in stock_items %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.quantity }} {{ item.unit.entry }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="alert alert-warning">Продукты отсутствуют</div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="col-xs-12 col-sm-6">
+                <div class="alert alert-warning">Для доступа к управлению складами необходима авторизация</div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
