@@ -42,11 +42,16 @@ class RatePeriodForm(forms.ModelForm):
         return self.cleaned_data
 
 
+def get_cafe_options():
+    return Cafe.objects.all().values_list("id", "name")
+
+
 class ReportForm(forms.Form):
     """
         Форма для запроса отчёта
     """
     cafe = forms.ChoiceField(
+        choices=get_cafe_options,
         label=u"Кафе"
     )
 
@@ -61,10 +66,6 @@ class ReportForm(forms.Form):
         label=u"до",
         input_formats=[get_input_date_format()]
     )
-
-    def __init__(self, *args, **kwargs):
-        super(ReportForm, self).__init__()
-        self.fields['cafe'].choices = Cafe.objects.all().values_list("id", "name")
 
     def clean(self):
         start = self.cleaned_data.get('date_from', "")
