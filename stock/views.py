@@ -65,6 +65,7 @@ def stock_reports(request):
 
     if request.POST:
         form = ReportForm(request.POST)
+        # spent_stock_items =
 
     return render(request, "stock/report.html", {
         "breadcrumbs": [{"title": "отчёты (склады)" }],

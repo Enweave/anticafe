@@ -4,8 +4,7 @@ from __future__ import unicode_literals
 from django.core.validators import MinValueValidator
 
 from django.db import models
-
-# Create your models here.
+from django.db.models.signals import post_save
 from django.utils import timezone
 from cafe.models import Cafe
 
@@ -95,3 +94,18 @@ class SpentStockItem(models.Model):
     class Meta:
         verbose_name = u"Запись о расходах"
         verbose_name_plural = u"Записи о расходах"
+
+
+from django.dispatch import receiver
+
+@receiver(post_save, sender=StockItem)
+def stock_post_save(sender, **kwargs):
+    if kwargs.get("created", False):
+        instance = kwargs.get("instance")
+
+        new_spent_stock = SpentStockItem(
+            stock_item=instance,
+            unit=instance.unit,
+            quantity=instance.quantity
+        )
+        new_spent_stock.save()
