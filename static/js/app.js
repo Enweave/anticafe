@@ -78,6 +78,7 @@ var bind_stock_form = function($form) {
             if (valid === true) {
                 $body.toggleClass("collapse");
                 $collapse.toggle();
+                $name_source.trigger("change");
             }
         });
 
@@ -117,7 +118,7 @@ var bind_stock_form = function($form) {
 
 $(document).ready(function() {
     var $form = $("#report_form");
-    $form.find('[name="date_from"],[name="date_to"]').datepicker(datepicker_defaults);
+    $form.find('[name="date_from"],[name="date_to"]').datepicker(datepicker_defaults)
     var $supply_form = $("#supply_form");
 
     if ($supply_form.length>0) {

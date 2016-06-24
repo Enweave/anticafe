@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils import timezone
+from django.utils.safestring import mark_safe
+from cafe.models import get_cafe_options
 from cafe.utils import get_input_date_format
 
 from models import StockItem, SpentStockItem
@@ -36,3 +38,34 @@ class StockItemFieldset(forms.ModelForm):
         self.fields['stock_item'].widget.attrs.update({"data-role": "fieldset-name-source"})
         self.fields['quantity'].label = u"на сколько изменить"
         self.fields['stock_item'].choices = choices
+
+
+class ReportForm(forms.Form):
+    """
+        Форма для запроса отчёта
+    """
+    cafe = forms.ChoiceField(
+        choices=get_cafe_options,
+        label=u"Кафе"
+    )
+
+    date_from = forms.DateField(
+        widget=forms.DateInput(),
+        label=u"от",
+        input_formats=[get_input_date_format()]
+    )
+
+    date_to = forms.DateField(
+        widget=forms.DateInput(),
+        label=u"до",
+        input_formats=[get_input_date_format()]
+    )
+
+    def clean(self):
+        start = self.cleaned_data.get('date_from', "")
+        end = self.cleaned_data.get('date_to', "")
+        if start and end:
+            if start > end:
+                self.add_error(None, mark_safe(
+                               u"Значение 'от' не может быть больше значения 'до'"))
+        return self.cleaned_data

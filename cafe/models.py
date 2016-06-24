@@ -358,4 +358,8 @@ class Visit(models.Model):
 
     def __unicode__(self):
         # TODO: format start and end
-        return u"Посещение за столиком '%s' с %s по %s" % (self.table.name,self.start, self.end )
+        return u"Посещение за столиком '%s' с %s по %s" % (self.table.name,self.start, self.end)
+
+
+def get_cafe_options():
+    return Cafe.objects.all().values_list("id", "name")

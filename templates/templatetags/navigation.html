@@ -1,5 +1,6 @@
 <nav>
     <ul class="nav nav-pills nav-stacked">
         <li class="nav-item {% if nav_selected == 0 %}active{% endif %}"><a href="{% url "cafe:reports" %}"><span class="glyphicon glyphicon-list-alt"></span>  Отчёты</a></li>
+        <li class="nav-item {% if nav_selected == 1 %}active{% endif %}"><a href="{% url "stock:reports" %}"><span class="glyphicon glyphicon-list"></span>  Отчёты (склады)</a></li>
     </ul>
 </nav>

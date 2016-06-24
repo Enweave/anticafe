@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block page_meta %}
+    <title>Отчёты (склады)</title>
+{% endblock %}
+
+{% block main_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-9">
+                {% if has_report %}
+                    кузщке
+                {% endif %}
+            </div>
+            <div  class="col-xs-12 col-sm-3">
+                {% include "stock/templatetags/stock_report_form.html" with form=report_form %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

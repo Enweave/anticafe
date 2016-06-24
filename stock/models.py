@@ -84,9 +84,9 @@ class SpentStockItem(models.Model):
     )
 
     quantity = models.IntegerField(
-        verbose_name=u"Сколько потрачено",
-        validators=[MinValueValidator(0)]
+        verbose_name=u"изменение",
     )
+
     date = models.DateTimeField(
         verbose_name=u"Дата",
         default=timezone.now

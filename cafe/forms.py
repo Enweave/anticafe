@@ -2,7 +2,7 @@
 
 from django import forms
 from django.utils.safestring import mark_safe
-from cafe.models import RatePeriod, Cafe
+from cafe.models import RatePeriod, get_cafe_options
 from cafe.utils import get_input_date_format
 
 
@@ -40,10 +40,6 @@ class RatePeriodForm(forms.ModelForm):
                                            % (start, end, p)))
                             break
         return self.cleaned_data
-
-
-def get_cafe_options():
-    return Cafe.objects.all().values_list("id", "name")
 
 
 class ReportForm(forms.Form):
